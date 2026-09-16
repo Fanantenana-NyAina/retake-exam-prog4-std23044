@@ -1,6 +1,5 @@
 package com.retake.exam.endpoint.event.model;
 
-import com.retake.exam.endpoint.event.PojaEvent;
 import java.time.Duration;
 import java.util.UUID;
 import lombok.AllArgsConstructor;

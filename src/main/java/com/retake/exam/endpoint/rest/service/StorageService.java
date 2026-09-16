@@ -1,5 +1,6 @@
 package com.retake.exam.endpoint.rest.service;
 
+import com.retake.exam.file.bucket.BucketComponent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
