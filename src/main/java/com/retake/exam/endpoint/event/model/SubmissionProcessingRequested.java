@@ -1,4 +1,4 @@
-package com.retake.exam.endpoint.rest.model;
+package com.retake.exam.endpoint.event.model;
 
 import com.retake.exam.endpoint.event.PojaEvent;
 import java.time.Duration;

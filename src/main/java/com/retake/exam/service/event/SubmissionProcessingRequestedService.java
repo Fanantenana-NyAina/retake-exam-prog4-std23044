@@ -1,12 +1,12 @@
-package com.retake.exam.endpoint.rest.service;
+package com.retake.exam.service.event;
 
 import com.retake.exam.endpoint.event.model.SubmissionProcessingRequested;
 import com.retake.exam.endpoint.rest.model.Submission;
 import com.retake.exam.endpoint.rest.repository.SubmissionRepository;
+import com.retake.exam.endpoint.rest.service.ImageService;
+import com.retake.exam.endpoint.rest.service.StorageService;
 import com.retake.exam.mail.Email;
 import com.retake.exam.mail.Mailer;
-import com.retake.exam.service.ImageService;
-import com.retake.exam.service.StorageService;
 import jakarta.mail.internet.InternetAddress;
 import java.util.List;
 import java.util.function.Consumer;
