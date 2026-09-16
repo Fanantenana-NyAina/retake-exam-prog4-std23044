@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class SubmissionProcessingRequestedService
-    implements Consumer<SubmissionProcessingRequested> {
+        implements Consumer<SubmissionProcessingRequested> {
 
   private final SubmissionRepository submissionRepository;
   private final ImageService imageService;
@@ -28,7 +28,8 @@ public class SubmissionProcessingRequestedService
   @SneakyThrows
   public void accept(SubmissionProcessingRequested event) {
 
-    byte[] thumbnail = imageService.resizeToThumbnail(event.getImage());
+    byte[] original = storageService.download(event.getOriginalKey());
+    byte[] thumbnail = imageService.resizeToThumbnail(original);
 
     String thumbnailKey = "thumbnails/" + event.getSubmissionId() + ".jpg";
 
@@ -42,15 +43,15 @@ public class SubmissionProcessingRequestedService
     String downloadUrl = storageService.presign(thumbnailKey);
 
     mailer.accept(
-        new Email(
-            new InternetAddress(event.getEmail()),
-            List.of(),
-            List.of(),
-            "Your thumbnail is ready",
-            "<p>Your thumbnail is ready.</p>"
-                + "<p><a href=\""
-                + downloadUrl
-                + "\">Download</a></p>",
-            List.of()));
+            new Email(
+                    new InternetAddress(event.getEmail()),
+                    List.of(),
+                    List.of(),
+                    "Your thumbnail is ready",
+                    "<p>Your thumbnail is ready.</p>"
+                            + "<p><a href=\""
+                            + downloadUrl
+                            + "\">Download</a></p>",
+                    List.of()));
   }
 }

@@ -4,6 +4,7 @@ import com.retake.exam.endpoint.event.EventProducer;
 import com.retake.exam.endpoint.event.model.SubmissionProcessingRequested;
 import com.retake.exam.endpoint.rest.model.Submission;
 import com.retake.exam.endpoint.rest.repository.SubmissionRepository;
+import com.retake.exam.endpoint.rest.service.StorageService;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -23,29 +24,34 @@ public class SubmissionController {
 
   private final SubmissionRepository submissionRepository;
   private final EventProducer<SubmissionProcessingRequested> eventProducer;
+  private final StorageService storageService;
 
   @PostMapping(value = "/submissions", consumes = "multipart/form-data")
   public ResponseEntity<Submission> createSubmission(
-      @RequestParam MultipartFile file, @RequestParam String email) throws IOException {
+          @RequestParam MultipartFile file, @RequestParam String email) throws IOException {
 
     UUID id = UUID.randomUUID();
 
     Submission submission =
-        Submission.builder()
-            .id(id)
-            .email(email)
-            .thumbnailKey(null)
-            .createdAt(Instant.now())
-            .build();
+            Submission.builder()
+                    .id(id)
+                    .email(email)
+                    .thumbnailKey(null)
+                    .createdAt(Instant.now())
+                    .build();
 
     submissionRepository.save(submission);
 
+    String extension = "image/png".equals(file.getContentType()) ? ".png" : ".jpg";
+    String originalKey = "originals/" + id + extension;
+    storageService.upload(file.getBytes(), originalKey);
+
     var event =
-        SubmissionProcessingRequested.builder()
-            .submissionId(id)
-            .email(email)
-            .image(file.getBytes())
-            .build();
+            SubmissionProcessingRequested.builder()
+                    .submissionId(id)
+                    .email(email)
+                    .originalKey(originalKey)
+                    .build();
 
     eventProducer.accept(List.of(event));
 

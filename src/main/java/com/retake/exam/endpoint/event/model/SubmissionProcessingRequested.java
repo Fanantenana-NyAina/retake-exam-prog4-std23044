@@ -19,7 +19,7 @@ public class SubmissionProcessingRequested extends PojaEvent {
 
   private UUID submissionId;
   private String email;
-  private byte[] image;
+  private String originalKey;
 
   @Override
   public Duration maxConsumerDuration() {

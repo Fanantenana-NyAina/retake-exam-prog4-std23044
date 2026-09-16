@@ -4,6 +4,7 @@ import com.retake.exam.file.bucket.BucketComponent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Duration;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,15 @@ public class StorageService {
       }
 
       bucketComponent.upload(file, key);
+    } finally {
+      file.delete();
+    }
+  }
+
+  public byte[] download(String key) throws IOException {
+    File file = bucketComponent.download(key);
+    try {
+      return Files.readAllBytes(file.toPath());
     } finally {
       file.delete();
     }
