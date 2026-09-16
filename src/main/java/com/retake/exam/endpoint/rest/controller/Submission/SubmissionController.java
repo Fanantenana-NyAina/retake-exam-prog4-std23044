@@ -1,4 +1,4 @@
-package com.retake.exam.endpoint.rest.controller;
+package com.retake.exam.endpoint.rest.controller.Submission;
 
 import com.retake.exam.endpoint.event.EventProducer;
 import com.retake.exam.endpoint.event.model.SubmissionProcessingRequested;
